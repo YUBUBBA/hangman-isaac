@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Виселица: Isaac Edition</title>
+</head>
+<body>
+
+<h1>Виселица</h1>
+
+<script>
+var pickWord = function() {
+    var isaacCharacters = [
+      "Isaac", "Magdalene", "Cain", "Judas", "Eve",
+      "Samson", "Azazel", "Lazarus", "Eden", "TheLost",
+      "Lilith", "Keeper", "Apollyon", "TheForgotten", "Bethany", "JacobandEsau"
+    ];
+    var randomIndex = Math.floor(Math.random() * isaacCharacters.length);
+    return isaacCharacters[randomIndex];
+};
+
+var setupAnswerArray = function(word) {
+    var answerArray = [];
+    for (var i = 0; i < word.length; i++) {
+        answerArray.push("_");
+    }
+    return answerArray;
+};
+
+var showPlayerProgress = function(answerArray, lives) {
+    alert("Слово: " + answerArray.join(" ") + "\nЖизни: " + lives);
+};
+
+var getGuess = function() {
+    var guess = prompt("Введи букву имени своего друга или нажми Отмена");
+    if (guess === null) return null;
+    if (guess.length !== 1) {
+        alert("Введи ОДНУ букву");
+        return null;
+    }
+    return guess.toLowerCase();
+};
+
+var updateGameState = function(guess, word, answerArray) {
+    var matches = 0;
+    for (var j = 0; j < word.length; j++) {
+        if (word[j].toLowerCase() === guess && answerArray[j] === "_") {
+            answerArray[j] = word[j];
+            matches++;
+        }
+    }
+    return matches;
+};
+
+var word = pickWord();
+var answerArray = setupAnswerArray(word);
+var remainingLetters = word.length;
+var lives = 3;
+
+while (remainingLetters > 0 && lives > 0) {
+    showPlayerProgress(answerArray, lives);
+    var guess = getGuess();
+    
+    if (guess === null) {
+        break;
+    }
+
+    var matches = updateGameState(guess, word, answerArray);
+
+    if (matches === 0) {
+        lives--;
+        alert("Такой буквы нет!");
+    } else {
+        remainingLetters -= matches;
+    }
+}
+
+if (remainingLetters === 0) {
+    alert("Победа! Имя друга: " + word);
+} else if (lives === 0) {
+    alert("Мама нашла тебя... Друга звали: " + word);
+} else {
+    alert("The end Это был: " + word);
+}
+</script>
+
+</body>
+</html>
